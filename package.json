@@ -1,0 +1,26 @@
+{
+	"devDependencies": {
+		"@types/react": "^18.2.48",
+		"@types/react-dom": "^18.2.18",
+		"eslint": "^8.56.0",
+		"eslint-plugin-react": "^7.33.2",
+		"lodash": "^4.17.21",
+		"prettier": "^3.2.4",
+		"tailwindcss": "^3.4.1",
+		"tsx": "^4.7.0",
+		"typescript": "^5.3.3",
+		"vite": "^5.0.11"
+	},
+	"dependencies": {
+		"@nextui-org/react": "^2.2.9",
+		"@vitejs/plugin-react": "^4.2.1",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"vite-plugin-pwa": "^0.17.4"
+	},
+	"type": "module",
+	"scripts": {
+		"tw": "tailwind -mi src/_styles/input.css -o src/_styles/main.out.css",
+		"tw:watch": "npm urn tw -- -w"
+	}
+}
