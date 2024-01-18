@@ -5,7 +5,7 @@ import { WordResult, findWords } from '../lib';
 
 export default function App() {
 	const [matrix, setMatrix] = useState<string[][]>([]);
-	const [searchTerm, setSearchTerm] = useState<string>('');
+	const [searchTerm, setSearchTerm] = useState<string[]>([]);
 	const [solution, setSolution] = useState<WordResult[]>([]);
 	const [error, setError] = useState<string>('');
 
@@ -25,7 +25,7 @@ export default function App() {
 						placeholder={`\
 QWERTYUIOP
 ASDFGHJKLT
-ZXCVBNMEW\
+ZXCVBNMEWS\
 `}
 						value={matrix.map(row => row.join('')).join('\n')}
 						onValueChange={value =>
@@ -44,11 +44,13 @@ ZXCVBNMEW\
 						isRequired
 						isClearable
 						variant="underlined"
-						label="Search term(s, separated by commas/whitespace)"
+						label="Search term(s), comma-separated"
 						size="lg"
 						placeholder="MEW"
-						value={searchTerm}
-						onValueChange={value => setSearchTerm(value.toUpperCase())}
+						value={searchTerm.join()}
+						onValueChange={value =>
+							setSearchTerm(value.toUpperCase().split(/[^A-Z]/))
+						}
 					/>
 					<div className="flex justify-center">
 						<Button onPress={submit} size="lg">
@@ -58,14 +60,14 @@ ZXCVBNMEW\
 					<p className="text-red-500">{error}</p>
 				</form>
 
-				<table className="leading-tight tracking-widest">
+				<table>
 					<tbody>
 						{matrix.map((row, y) => (
 							<tr key={y} className="align-middle">
 								{row.map((letter, x) => (
 									<td
 										key={x}
-										className={`align-middle text-center p-0 pl-[.175rem] w-8 h-8 aspect-square ${
+										className={`tracking-widest leading-none align-middle text-center pl-[.175rem] pt-[.25rem] !w-8 !h-8 !aspect-square dark:border-white border-black border-1.5 sm:text-xs md:text-lg lg:text-xl ${
 											solution.some(e =>
 												e.coords.some(coords =>
 													coords.some(
@@ -90,7 +92,7 @@ ZXCVBNMEW\
 
 	function submit() {
 		try {
-			const newSolution = findWords(matrix, searchTerm.split(/[^A-Z]/));
+			const newSolution = findWords(matrix, searchTerm);
 			if (newSolution.length === 0) throw new Error('Word not found');
 			setSolution(newSolution);
 			setError('');
