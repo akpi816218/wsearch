@@ -11,8 +11,10 @@ export default function App() {
 
 	return (
 		<RootLayout>
-			<main className="flex flex-col w-screen justify-center items-center p-8 md:p-16 lg:p-32 gap-4 md:gap-8 dark:text-white text-center text-xl font-mono tracking-wide">
-				<h1 className="font-semibold text-3xl">Wordsearch Solver</h1>
+			<main className="flex flex-col w-screen justify-center items-center px-12 py-16 md:p-16 lg:p-32 gap-4 md:gap-8 dark:text-white text-center text-xl font-mono tracking-widest">
+				<h1 className="font-semibold sm:text-2xl md:text-4xl">
+					Wordsearch Solver
+				</h1>
 				<form
 					className="flex flex-col justify-center items-center gap-8 w-full"
 					onSubmit={submitForm}
