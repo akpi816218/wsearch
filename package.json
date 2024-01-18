@@ -19,7 +19,7 @@
 		"vite-plugin-pwa": "^0.17.4"
 	},
 	"type": "module",
-	"scripts":
+	"scripts": {
 		"build": "npm urn tw && vite build",
 		"tw": "tailwind -mi src/_styles/input.css -o src/_styles/main.out.css",
 		"tw:watch": "npm urn tw -- -w"
