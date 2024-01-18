@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import RootLayout from './_components/RootLayout';
-import { Button, Input, Textarea } from '@nextui-org/react';
+import { Button, Divider, Input, Textarea } from '@nextui-org/react';
 import { WordResult, findWords } from '../lib';
 
 export default function App() {
@@ -23,6 +23,9 @@ export default function App() {
 						isRequired
 						isMultiline
 						label="Puzzle data"
+						classNames={{
+							input: 'tracking-widest'
+						}}
 						size="lg"
 						placeholder={`\
 QWERTYUIOP
@@ -51,11 +54,26 @@ ZXCVBNMEWS\
 						placeholder="MEW"
 						value={searchTerm.join()}
 						onValueChange={value =>
-							setSearchTerm(value.toUpperCase().split(/[^A-Z]/))
+							setSearchTerm(
+								value
+									.toUpperCase()
+									.replaceAll(/[^A-Z]{2,}/g, ',')
+									.split(/[^A-Z]/)
+							)
 						}
 					/>
-					<div className="flex justify-center">
-						<Button onPress={submit} size="lg">
+					<div className="flex flex-row items-center justify-center gap-4 md:gap-8">
+						{/* <Button
+							size="lg"
+							color="danger"
+							onPress={() => {
+								setSolution([]);
+								console.log('cleared');
+							}}
+						>
+							Clear solution
+						</Button> */}
+						<Button onPress={submit} size="lg" color="success">
 							Solve
 						</Button>
 					</div>
@@ -88,16 +106,67 @@ ZXCVBNMEWS\
 						))}
 					</tbody>
 				</table>
+
+				<Divider className="my-8" />
+
+				{/* <Button size="lg" color="secondary">
+					Save data locally
+				</Button>
+				<Button
+					size="lg"
+					color="primary"
+					onPress={() => {
+						let error = '';
+						const lsMatrix = localStorage.getItem('wordsearch-matrix'),
+							lsSearchTerm = localStorage.getItem('wordsearch-searchTerm');
+						try {
+							if (lsMatrix) {
+								const data = JSON.parse(lsMatrix);
+								if (
+									Array.isArray(data) &&
+									data.every(row => Array.isArray(row))
+								)
+									setMatrix(data);
+								else throw new Error();
+							} else throw new Error();
+						} catch {
+							error += ' Matrix data is invalid. ';
+						}
+
+						try {
+							if (lsSearchTerm) {
+								const data = JSON.parse(lsSearchTerm);
+								if (Array.isArray(data)) setSearchTerm(data);
+								else throw new Error();
+							} else throw new Error();
+						} catch {
+							error += ' Search term data is invalid. ';
+						}
+						setError(error.trim().replaceAll(/\s{2,}/g, ' '));
+					}}
+				>
+					Restore locally saved data
+				</Button> */}
 			</main>
 		</RootLayout>
 	);
 
 	function submit() {
 		try {
-			const newSolution = findWords(matrix, searchTerm);
+			const newSolution = findWords(
+				matrix,
+				searchTerm.filter(e => e.length > 0)
+			);
 			if (newSolution.length === 0) throw new Error('Word not found');
 			setSolution(newSolution);
+			const notFoundWords = newSolution
+				.filter(word => word.coords.length === 0)
+				.map(word => word.word);
 			setError('');
+			if (notFoundWords.length > 0)
+				throw new Error(
+					`Word${notFoundWords.length > 1 ? 's' : ''} not found: ${notFoundWords.join(', ')}`
+				);
 		} catch (e) {
 			setError((e as Error).message);
 		}
