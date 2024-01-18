@@ -31,7 +31,7 @@ ZXCVBNMEW\
 						onValueChange={value =>
 							setMatrix(
 								value
-									toUpperCase()
+									.toUpperCase()
 									.split('\n')
 									.map(row =>
 										row.replaceAll(/\s/g, '').replaceAll('\t', '').split('')
