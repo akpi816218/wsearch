@@ -11,7 +11,7 @@ export default function App() {
 
 	return (
 		<RootLayout>
-			<main className="flex flex-col w-screen justify-center items-center p-8 md:p-16 lg:p-32 gap-4 md:gap-8 dark:text-white text-center text-xl font-mono">
+			<main className="flex flex-col w-screen justify-center items-center p-8 md:p-16 lg:p-32 gap-4 md:gap-8 dark:text-white text-center text-xl font-mono tracking-wide">
 				<h1 className="font-semibold text-3xl">Wordsearch Solver</h1>
 				<form
 					className="flex flex-col justify-center items-center gap-8 w-full"
