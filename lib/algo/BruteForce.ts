@@ -14,6 +14,15 @@ export function bruteForceFindWord(matrix: string[][], word: string) {
 
 	const firstLetter = word[0];
 
+	if (word.length === 1) {
+		for (let row = 0; row < height; row++) {
+			for (let col = 0; col < width; col++) {
+				if (matrix[row][col] === firstLetter) checkResults.push([{ row, col }]);
+			}
+		}
+		return { word, coords: checkResults };
+	}
+
 	for (let row = 0; row < height; row++) {
 		for (let col = 0; col < width; col++) {
 			if (matrix[row][col] !== firstLetter) continue;

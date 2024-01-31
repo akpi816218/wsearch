@@ -1,6 +1,18 @@
 import { useState } from 'react';
 import RootLayout from './_components/RootLayout';
-import { Button, Divider, Input, Textarea } from '@nextui-org/react';
+import {
+	Button,
+	Divider,
+	Input,
+	Modal,
+	Table,
+	TableBody,
+	TableCell,
+	TableColumn,
+	TableHeader,
+	TableRow,
+	Textarea
+} from '@nextui-org/react';
 import { WordResult, findWords } from '../lib';
 
 export default function App() {
@@ -8,6 +20,8 @@ export default function App() {
 	const [searchTerm, setSearchTerm] = useState<string[]>([]);
 	const [solution, setSolution] = useState<WordResult[]>([]);
 	const [error, setError] = useState<string>('');
+	const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
+	const [displaySolution, setDisplaySolution] = useState<WordResult[]>([]);
 
 	return (
 		<RootLayout>
@@ -41,7 +55,9 @@ ZXCVBNMEWS\
 									.map(row =>
 										row.replaceAll(/\s/g, '').replaceAll('\t', '').split('')
 									)
-									.filter(row => row.length > 0)
+									.filter(
+										(row, i, arr) => row.length > 0 || i === arr.length - 1
+									)
 							)
 						}
 					/>
@@ -55,30 +71,59 @@ ZXCVBNMEWS\
 						value={searchTerm.join()}
 						onValueChange={value =>
 							setSearchTerm(
-								value
-									.toUpperCase()
-									.replaceAll(/[^A-Z]{2,}/g, ',')
-									.split(/[^A-Z]/)
+								Array.from(
+									new Set(
+										value
+											.toUpperCase()
+											.replaceAll(/[^A-Z]{2,}/g, ',')
+											.split(/[^A-Z]/)
+									)
+								)
 							)
 						}
 					/>
 					<div className="flex flex-row items-center justify-center gap-4 md:gap-8">
-						{/* <Button
-							size="lg"
-							color="danger"
-							onPress={() => {
-								setSolution([]);
-								console.log('cleared');
-							}}
-						>
+						<Button size="lg" color="danger" onPress={() => setSolution([])}>
 							Clear solution
-						</Button> */}
+						</Button>
 						<Button onPress={submit} size="lg" color="success">
 							Solve
 						</Button>
 					</div>
 					<p className="text-red-500">{error}</p>
 				</form>
+
+				<Table
+					selectionMode="multiple"
+					color="success"
+					className="text-start"
+					selectedKeys={selectedKeys}
+					onSelectionChange={keys => {
+						const newKeys =
+							keys instanceof Set
+								? (keys as Set<string>)
+								: new Set(solution.map(e => e.word));
+						setSelectedKeys(newKeys);
+						setDisplaySolution(solution.filter(wr => newKeys.has(wr.word)));
+					}}
+				>
+					<TableHeader>
+						<TableColumn>Word</TableColumn>
+						<TableColumn>Frequency</TableColumn>
+					</TableHeader>
+					<TableBody items={solution} emptyContent="Press 'Solve'">
+						{item => (
+							<TableRow key={item.word}>
+								<TableCell>{item.word}</TableCell>
+								<TableCell
+									className={`${item.coords.length === 0 ? 'text-red-500' : ''}`}
+								>
+									{item.coords.length}
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+				</Table>
 
 				<table>
 					<tbody>
@@ -88,7 +133,7 @@ ZXCVBNMEWS\
 									<td
 										key={x}
 										className={`tracking-widest leading-none align-middle text-center pl-[.175rem] pt-[.25rem] !w-8 !h-8 !aspect-square dark:border-white border-black border-1.5 sm:text-xs md:text-lg lg:text-xl ${
-											solution.some(e =>
+											displaySolution.some(e =>
 												e.coords.some(coords =>
 													coords.some(
 														coord => coord.col === x && coord.row === y
@@ -156,8 +201,12 @@ ZXCVBNMEWS\
 			const newSolution = findWords(
 				matrix,
 				searchTerm.filter(e => e.length > 0)
-			);
+			)
+				.sort((a, b) => a.word.localeCompare(b.word))
+				.sort((a, b) => b.coords.length - a.coords.length);
 			if (newSolution.length === 0) throw new Error('Word not found');
+			setSelectedKeys(new Set(newSolution.map(e => e.word)));
+			setDisplaySolution(newSolution.map(e => e));
 			setSolution(newSolution);
 			const notFoundWords = newSolution
 				.filter(word => word.coords.length === 0)
