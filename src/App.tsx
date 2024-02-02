@@ -5,6 +5,7 @@ import {
 	Divider,
 	Input,
 	Modal,
+	ScrollShadow,
 	Table,
 	TableBody,
 	TableCell,
@@ -14,6 +15,8 @@ import {
 	Textarea
 } from '@nextui-org/react';
 import { WordResult, findWords } from '../lib';
+import DynamicWrapper from './_components/DynamicWrapper';
+import ScrollShadowComponent from './_components/ScrollShadowComponent';
 
 export default function App() {
 	const [matrix, setMatrix] = useState<string[][]>([]);
@@ -25,136 +28,149 @@ export default function App() {
 
 	return (
 		<RootLayout>
-			<main className="flex flex-col w-screen justify-center items-center px-12 py-16 md:p-16 lg:p-32 gap-4 md:gap-8 dark:text-white text-center text-xl font-mono tracking-widest">
-				<h1 className="font-semibold sm:text-2xl md:text-4xl">
-					Wordsearch Solver
-				</h1>
-				<form
-					className="flex flex-col justify-center items-center gap-8 w-full"
-					onSubmit={submitForm}
-				>
-					<Textarea
-						isRequired
-						isMultiline
-						label="Puzzle data"
-						classNames={{
-							input: 'tracking-widest'
-						}}
-						size="lg"
-						placeholder={`\
+			<main className="grid items-stretch justify-stretch w-screen h-screen px-12 py-16 md:p-16 lg:p-32">
+				<DynamicWrapper smallWrapper={ScrollShadowComponent}>
+					<div className="flex flex-col self-stretch justify-self-stretch justify-center items-center gap-4 md:gap-8 dark:text-white text-center text-xl font-mono tracking-widest">
+						<h1 className="font-semibold sm:text-2xl md:text-4xl">
+							Wordsearch Solver
+						</h1>
+						<form
+							className="flex flex-col justify-center items-center gap-8 w-full"
+							onSubmit={submitForm}
+						>
+							<Textarea
+								isRequired
+								isMultiline
+								label="Puzzle data"
+								classNames={{
+									input: 'tracking-widest'
+								}}
+								size="lg"
+								placeholder={`\
 QWERTYUIOP
 ASDFGHJKLT
 ZXCVBNMEWS\
 `}
-						value={matrix.map(row => row.join('')).join('\n')}
-						onValueChange={value =>
-							setMatrix(
-								value
-									.toUpperCase()
-									.split('\n')
-									.map(row =>
-										row.replaceAll(/\s/g, '').replaceAll('\t', '').split('')
-									)
-									.filter(
-										(row, i, arr) => row.length > 0 || i === arr.length - 1
-									)
-							)
-						}
-					/>
-					<Input
-						isRequired
-						isClearable
-						variant="underlined"
-						label="Search term(s), comma-separated"
-						size="lg"
-						placeholder="MEW"
-						value={searchTerm.join()}
-						onValueChange={value =>
-							setSearchTerm(
-								Array.from(
-									new Set(
+								value={matrix.map(row => row.join('')).join('\n')}
+								onValueChange={value =>
+									setMatrix(
 										value
 											.toUpperCase()
-											.replaceAll(/[^A-Z]{2,}/g, ',')
-											.split(/[^A-Z]/)
-									)
-								)
-							)
-						}
-					/>
-					<div className="flex flex-row items-center justify-center gap-4 md:gap-8">
-						<Button size="lg" color="danger" onPress={() => setSolution([])}>
-							Clear solution
-						</Button>
-						<Button onPress={submit} size="lg" color="success">
-							Solve
-						</Button>
-					</div>
-					<p className="text-red-500">{error}</p>
-				</form>
-
-				<Table
-					selectionMode="multiple"
-					color="success"
-					className="text-start"
-					selectedKeys={selectedKeys}
-					onSelectionChange={keys => {
-						const newKeys =
-							keys instanceof Set
-								? (keys as Set<string>)
-								: new Set(solution.map(e => e.word));
-						setSelectedKeys(newKeys);
-						setDisplaySolution(solution.filter(wr => newKeys.has(wr.word)));
-					}}
-				>
-					<TableHeader>
-						<TableColumn>Word</TableColumn>
-						<TableColumn>Frequency</TableColumn>
-					</TableHeader>
-					<TableBody items={solution} emptyContent="Press 'Solve'">
-						{item => (
-							<TableRow key={item.word}>
-								<TableCell>{item.word}</TableCell>
-								<TableCell
-									className={`${item.coords.length === 0 ? 'text-red-500' : ''}`}
-								>
-									{item.coords.length}
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-
-				<table>
-					<tbody>
-						{matrix.map((row, y) => (
-							<tr key={y} className="align-middle">
-								{row.map((letter, x) => (
-									<td
-										key={x}
-										className={`tracking-widest leading-none align-middle text-center pl-[.175rem] pt-[.25rem] !w-8 !h-8 !aspect-square dark:border-white border-black border-1.5 sm:text-xs md:text-lg lg:text-xl ${
-											displaySolution.some(e =>
-												e.coords.some(coords =>
-													coords.some(
-														coord => coord.col === x && coord.row === y
-													)
-												)
+											.split('\n')
+											.map(row =>
+												row.replaceAll(/\s/g, '').replaceAll('\t', '').split('')
 											)
-												? 'bg-green-500'
-												: ''
-										}`}
-									>
-										{letter}
-									</td>
+											.filter(
+												(row, i, arr) => row.length > 0 || i === arr.length - 1
+											)
+									)
+								}
+							/>
+							<Input
+								isRequired
+								isClearable
+								variant="underlined"
+								label="Search term(s), comma-separated"
+								size="lg"
+								placeholder="MEW"
+								value={searchTerm.join()}
+								onValueChange={value =>
+									setSearchTerm(
+										Array.from(
+											new Set(
+												value
+													.toUpperCase()
+													.replaceAll(/[^A-Z]{2,}/g, ',')
+													.split(/[^A-Z]/)
+											)
+										)
+									)
+								}
+							/>
+							<div className="flex flex-row items-center justify-center gap-4 md:gap-8">
+								<Button
+									size="lg"
+									color="danger"
+									onPress={() => setSolution([])}
+								>
+									Clear solution
+								</Button>
+								<Button onPress={submit} size="lg" color="success">
+									Solve
+								</Button>
+							</div>
+							<p className="text-red-500 text-base">{error}</p>
+						</form>
+
+						<Table
+							selectionMode="multiple"
+							color="warning"
+							className="text-start"
+							selectedKeys={selectedKeys}
+							disabledKeys={
+								new Set(
+									solution
+										.filter(wr => wr.coords.length === 0)
+										.map(wr => wr.word)
+								)
+							}
+							onSelectionChange={keys => {
+								const newKeys =
+									keys instanceof Set
+										? (keys as Set<string>)
+										: new Set(solution.map(e => e.word));
+								setSelectedKeys(newKeys);
+								setDisplaySolution(solution.filter(wr => newKeys.has(wr.word)));
+							}}
+						>
+							<TableHeader>
+								<TableColumn>Word</TableColumn>
+								<TableColumn>Frequency</TableColumn>
+							</TableHeader>
+							<TableBody items={solution} emptyContent="Press 'Solve'">
+								{item => (
+									<TableRow key={item.word}>
+										<TableCell>{item.word}</TableCell>
+										<TableCell
+											className={`${item.coords.length === 0 ? '!text-red-500' : ''}`}
+										>
+											{item.coords.length}
+										</TableCell>
+									</TableRow>
+								)}
+							</TableBody>
+						</Table>
+
+						<table>
+							<tbody>
+								{matrix.map((row, y) => (
+									<tr key={y} className="align-middle">
+										{row.map((letter, x) => (
+											<td
+												key={x}
+												className={`tracking-widest leading-none align-middle text-center pl-[.175rem] pt-[.25rem] !w-8 !h-8 !aspect-square dark:border-white border-black border-1.5 sm:text-xs md:text-lg lg:text-xl ${
+													displaySolution.some(e =>
+														e.coords.some(coords =>
+															coords.some(
+																coord => coord.col === x && coord.row === y
+															)
+														)
+													)
+														? 'bg-green-500'
+														: ''
+												}`}
+											>
+												{letter}
+											</td>
+										))}
+									</tr>
 								))}
-							</tr>
-						))}
-					</tbody>
-				</table>
+							</tbody>
+						</table>
 
-				<Divider className="my-8" />
+						<Divider className="my-8" />
 
-				{/* <Button size="lg" color="secondary">
+						{/* <Button size="lg" color="secondary">
 					Save data locally
 				</Button>
 				<Button
@@ -192,6 +208,8 @@ ZXCVBNMEWS\
 				>
 					Restore locally saved data
 				</Button> */}
+					</div>
+				</DynamicWrapper>
 			</main>
 		</RootLayout>
 	);
@@ -205,16 +223,19 @@ ZXCVBNMEWS\
 				.sort((a, b) => a.word.localeCompare(b.word))
 				.sort((a, b) => b.coords.length - a.coords.length);
 			if (newSolution.length === 0) throw new Error('Word not found');
-			setSelectedKeys(new Set(newSolution.map(e => e.word)));
+			setSelectedKeys(
+				new Set(newSolution.filter(e => e.coords.length > 0).map(e => e.word))
+			);
 			setDisplaySolution(newSolution.map(e => e));
 			setSolution(newSolution);
 			const notFoundWords = newSolution
 				.filter(word => word.coords.length === 0)
 				.map(word => word.word);
 			setError('');
-			if (notFoundWords.length > 0)
+			const countNotFound = notFoundWords.length;
+			if (countNotFound > 0)
 				throw new Error(
-					`Word${notFoundWords.length > 1 ? 's' : ''} not found: ${notFoundWords.join(', ')}`
+					`${countNotFound} word${countNotFound > 1 ? 's' : ''} not found`
 				);
 		} catch (e) {
 			setError((e as Error).message);
