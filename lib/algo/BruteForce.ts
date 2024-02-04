@@ -7,7 +7,10 @@ import { Coords, Directions, SearchStackValue, WordResult } from '../types';
  * @param {string} word The word to search for
  * @returns {WordResult} An array of the coordinates of each occurrance of the word
  */
-export function bruteForceFindWord(matrix: string[][], word: string) {
+export function bruteForceFindWord(
+	matrix: string[][],
+	word: string
+): WordResult {
 	const checkResults: Coords[][] = [],
 		height = matrix.length,
 		width = matrix[0].length;
@@ -55,5 +58,22 @@ export function bruteForceFindWord(matrix: string[][], word: string) {
 		}
 	}
 
-	return { word, coords: checkResults };
+	return {
+		word,
+		coords: removeBackwardsDuplicates(checkResults)
+	};
+}
+
+/**
+ * Remove duplicate coordinates from an array of coordinates
+ * @param {Coords[][]} arr The array of coordinates to remove duplicates from
+ */
+function removeBackwardsDuplicates(arr: Coords[][]) {
+	const result: Coords[][] = [];
+	for (const item of arr) {
+		const stringified = JSON.stringify(item);
+		if (!result.some(r => JSON.stringify(r.reverse()) === stringified))
+			result.push(item);
+	}
+	return result;
 }
