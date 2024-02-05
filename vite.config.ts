@@ -54,6 +54,7 @@ export default defineConfig({
 			}
 		})
 	],
+	base: '/wsearch/',
 	root: 'src',
 	appType: 'spa',
 	build: {
