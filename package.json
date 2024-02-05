@@ -30,6 +30,6 @@
 		"gen-screenshots": "tsx scripts/generateScreenshots.ts",
 		"preview": "vite preview",
 		"tw": "tailwind -mi src/_styles/input.css -o src/_styles/main.out.css",
-		"tw:watch": "npm urn tw -- -w"
+		"tww": "npm urn tw -- -w"
 	}
 }

@@ -10,7 +10,6 @@ import {
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
-	ScrollShadow,
 	Table,
 	TableBody,
 	TableCell,
@@ -38,7 +37,7 @@ export default function App() {
 
 	return (
 		<RootLayout>
-			<main className="grid items-stretch justify-stretch w-screen min-h-screen px-12 py-16 md:p-16 lg:p-32">
+			<main className="grid items-stretch justify-stretch min-h-screen m-0 px-12 py-16 md:p-16 lg:p-32 border-2 border-red-500">
 				<DynamicWrapper smallWrapper={ScrollShadowComponent}>
 					<div className="flex flex-col justify-center items-center gap-4 md:gap-8 dark:text-white text-center text-xl font-mono tracking-widest">
 						<h1 className="font-semibold sm:text-2xl md:text-4xl">
@@ -183,128 +182,6 @@ ZXCVBNMEWS\
 						<Button onPress={onOpen} color="secondary">
 							Credits
 						</Button>
-						<Modal title="Credits" isOpen={isOpen} onOpenChange={onOpenChange}>
-							<ModalContent>
-								<ModalHeader>Credits</ModalHeader>
-								<ModalBody>
-									<div className="flex flex-col gap-4">
-										<p className="mb-4">
-											Wordsearch Solver is a Progressive Web App that allows you
-											to input a wordsearch puzzle and a list of words to search
-											for. It will then find and highlight the words in the
-											puzzle. The source code is available on{' '}
-											<Link
-												href="https://github.com/akpi816218/wsearch"
-												target="_blank"
-												underline="always"
-												isExternal
-											>
-												GitHub
-											</Link>
-											.
-											<br />
-											<br />
-											Developed by{' '}
-											<Link
-												href="https://akpi.is-a.dev/"
-												target="_blank"
-												underline="always"
-												isExternal
-											>
-												Akhil Pillai
-											</Link>
-											.
-										</p>
-										<h2 className="text-lg font-semibold font-press-start text-indigo-600 underline underline-offset-2">
-											Open Source Libraries
-										</h2>
-										<Table
-											isStriped
-											classNames={{
-												wrapper: 'border-neutral-500 border-2'
-											}}
-										>
-											<TableHeader>
-												<TableColumn>Library</TableColumn>
-												<TableColumn>License</TableColumn>
-											</TableHeader>
-											<TableBody
-												items={[
-													{
-														name: 'NextUI',
-														license: 'MIT',
-														github: 'nextui-org/nextui'
-													},
-													{
-														name: 'React',
-														license: 'MIT',
-														github: 'facebook/react'
-													},
-													{
-														name: 'TypeScript',
-														license: 'Apache-2.0',
-														github: 'microsoft/TypeScript'
-													},
-													{
-														name: 'Tailwind CSS',
-														license: 'MIT',
-														github: 'tailwindlabs/tailwindcss'
-													},
-													{
-														name: 'Font Awesome',
-														license: 'MIT',
-														github: 'FortAwesome/react-fontawesome'
-													},
-													{
-														name: 'ESLint',
-														license: 'MIT',
-														github: 'eslint/eslint'
-													},
-													{
-														name: 'eslint-plugin-react',
-														license: 'MIT',
-														github: 'jsx-eslint/eslint-plugin-react',
-														isMono: true
-													},
-													{
-														name: 'Prettier',
-														license: 'MIT',
-														github: 'prettier/prettier'
-													},
-													{
-														name: 'Vite',
-														license: 'MIT',
-														github: 'vitejs/vite'
-													},
-													{
-														name: 'vite-plugin-react',
-														license: 'MIT',
-														github: 'vitejs/vite-plugin-react',
-														isMono: true
-													},
-													{
-														name: 'Puppeteer',
-														license: 'Apache-2.0'
-													}
-												]}
-											>
-												{item => (
-													<TableRow key={item.name}>
-														<TableCell>{item.name}</TableCell>
-														<TableCell>{item.license}</TableCell>
-													</TableRow>
-												)}
-											</TableBody>
-										</Table>
-									</div>
-								</ModalBody>
-								<ModalFooter>
-									<Button onPress={onOpenChange} color="warning">
-										Close
-									</Button>
-								</ModalFooter>
-							</ModalContent>
-						</Modal>
 
 						<div className="flex flex-row justify-center align-middle gap-8 md:gap-12 tracking-normal text-xl">
 							<Link
@@ -329,6 +206,147 @@ ZXCVBNMEWS\
 					</div>
 				</DynamicWrapper>
 			</main>
+			<Modal
+				title="Credits"
+				isOpen={isOpen}
+				onOpenChange={onOpenChange}
+				placement="center"
+				scrollBehavior="inside"
+				size="2xl"
+			>
+				<ModalContent>
+					<ModalHeader>Credits</ModalHeader>
+					<ModalBody>
+						<div className="flex flex-col gap-4">
+							<p className="mb-4">
+								Wordsearch Solver is a Progressive Web App that allows you to
+								input a wordsearch puzzle and a list of words to search for. It
+								will then find and highlight the words in the puzzle. The source
+								code is available on{' '}
+								<Link
+									href="https://github.com/akpi816218/wsearch"
+									target="_blank"
+									underline="always"
+									isExternal
+								>
+									GitHub
+								</Link>
+								.
+								<br />
+								<br />
+								Developed by{' '}
+								<Link
+									href="https://akpi.is-a.dev/"
+									target="_blank"
+									underline="always"
+									isExternal
+								>
+									Akhil Pillai
+								</Link>
+								.
+							</p>
+							<h2 className="text-center text-lg font-semibold font-press-start text-indigo-600 underline underline-offset-2">
+								Open Source Tools and Libraries
+							</h2>
+							<Table
+								isStriped
+								classNames={{
+									wrapper: 'border-neutral-500 border-2'
+								}}
+							>
+								<TableHeader>
+									<TableColumn>Name</TableColumn>
+									<TableColumn>License</TableColumn>
+									<TableColumn>GitHub</TableColumn>
+								</TableHeader>
+								<TableBody
+									items={[
+										{
+											name: 'ESLint',
+											license: 'MIT',
+											github: 'eslint/eslint'
+										},
+										{
+											name: 'eslint-plugin-react',
+											license: 'MIT',
+											github: 'jsx-eslint/eslint-plugin-react',
+											isMono: true
+										},
+										{
+											name: 'Font Awesome',
+											license: 'MIT',
+											github: 'FortAwesome/react-fontawesome'
+										},
+										{
+											name: 'NextUI',
+											license: 'MIT',
+											github: 'nextui-org/nextui'
+										},
+										{
+											name: 'Prettier',
+											license: 'MIT',
+											github: 'prettier/prettier'
+										},
+										{
+											name: 'Puppeteer',
+											license: 'Apache-2.0',
+											github: 'puppeteer/puppeteer'
+										},
+										{
+											name: 'pwa-asset-generator',
+											license: 'MIT',
+											github: 'elegantapp/pwa-asset-generator',
+											isMono: true
+										},
+										{
+											name: 'React',
+											license: 'MIT',
+											github: 'facebook/react'
+										},
+										{
+											name: 'Tailwind CSS',
+											license: 'MIT',
+											github: 'tailwindlabs/tailwindcss'
+										},
+										{
+											name: 'Vite',
+											license: 'MIT',
+											github: 'vitejs/vite'
+										},
+										{
+											name: 'vite-plugin-react',
+											license: 'MIT',
+											github: 'vitejs/vite-plugin-react',
+											isMono: true
+										}
+									]}
+								>
+									{item => (
+										<TableRow key={item.name}>
+											<TableCell>{item.name}</TableCell>
+											<TableCell>{item.license}</TableCell>
+											<TableCell>
+												<Link
+													href={`https://github.com/${item.github}`}
+													target="_blank"
+													isExternal
+												>
+													{item.github}
+												</Link>
+											</TableCell>
+										</TableRow>
+									)}
+								</TableBody>
+							</Table>
+						</div>
+					</ModalBody>
+					<ModalFooter>
+						<Button onPress={onOpenChange} color="warning">
+							Close
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</RootLayout>
 	);
 
