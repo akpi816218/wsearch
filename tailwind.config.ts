@@ -32,7 +32,8 @@ export const config: Config = {
 		},
 		fontFamily: {
 			sans: ['Poppins', 'Ubuntu', 'Inter', 'Roboto', 'sans-serif'],
-			mono: ['Ubuntu Mono', 'Roboto Mono', 'monospace']
+			mono: ['Ubuntu Mono', 'Roboto Mono', 'monospace'],
+			'press-start': ['"Press Start 2P"', 'monospace']
 		},
 		scale: {
 			175: '1.75',

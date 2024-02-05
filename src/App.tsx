@@ -4,7 +4,12 @@ import {
 	Button,
 	Divider,
 	Input,
+	Link,
 	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
 	ScrollShadow,
 	Table,
 	TableBody,
@@ -12,11 +17,15 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-	Textarea
+	Textarea,
+	useDisclosure
 } from '@nextui-org/react';
 import { WordResult, findWords } from '../lib';
 import DynamicWrapper from './_components/DynamicWrapper';
 import ScrollShadowComponent from './_components/ScrollShadowComponent';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 
 export default function App() {
 	const [matrix, setMatrix] = useState<string[][]>([]);
@@ -25,12 +34,13 @@ export default function App() {
 	const [error, setError] = useState<string>('');
 	const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
 	const [displaySolution, setDisplaySolution] = useState<WordResult[]>([]);
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
 	return (
 		<RootLayout>
-			<main className="grid items-stretch justify-stretch w-screen h-screen px-12 py-16 md:p-16 lg:p-32">
+			<main className="grid items-stretch justify-stretch w-screen min-h-screen px-12 py-16 md:p-16 lg:p-32">
 				<DynamicWrapper smallWrapper={ScrollShadowComponent}>
-					<div className="flex flex-col self-stretch justify-self-stretch justify-center items-center gap-4 md:gap-8 dark:text-white text-center text-xl font-mono tracking-widest">
+					<div className="flex flex-col justify-center items-center gap-4 md:gap-8 dark:text-white text-center text-xl font-mono tracking-widest">
 						<h1 className="font-semibold sm:text-2xl md:text-4xl">
 							Wordsearch Solver
 						</h1>
@@ -168,46 +178,154 @@ ZXCVBNMEWS\
 							</tbody>
 						</table>
 
-						<Divider className="my-8" />
+						<Divider className="mt-8" />
 
-						{/* <Button size="lg" color="secondary">
-					Save data locally
-				</Button>
-				<Button
-					size="lg"
-					color="primary"
-					onPress={() => {
-						let error = '';
-						const lsMatrix = localStorage.getItem('wordsearch-matrix'),
-							lsSearchTerm = localStorage.getItem('wordsearch-searchTerm');
-						try {
-							if (lsMatrix) {
-								const data = JSON.parse(lsMatrix);
-								if (
-									Array.isArray(data) &&
-									data.every(row => Array.isArray(row))
-								)
-									setMatrix(data);
-								else throw new Error();
-							} else throw new Error();
-						} catch {
-							error += ' Matrix data is invalid. ';
-						}
+						<Button onPress={onOpen} color="secondary">
+							Credits
+						</Button>
+						<Modal title="Credits" isOpen={isOpen} onOpenChange={onOpenChange}>
+							<ModalContent>
+								<ModalHeader>Credits</ModalHeader>
+								<ModalBody>
+									<div className="flex flex-col gap-4">
+										<p className="mb-4">
+											Wordsearch Solver is a Progressive Web App that allows you
+											to input a wordsearch puzzle and a list of words to search
+											for. It will then find and highlight the words in the
+											puzzle. The source code is available on{' '}
+											<Link
+												href="https://github.com/akpi816218/wsearch"
+												target="_blank"
+												underline="always"
+												isExternal
+											>
+												GitHub
+											</Link>
+											.
+											<br />
+											<br />
+											Developed by{' '}
+											<Link
+												href="https://akpi.is-a.dev/"
+												target="_blank"
+												underline="always"
+												isExternal
+											>
+												Akhil Pillai
+											</Link>
+											.
+										</p>
+										<h2 className="text-lg font-semibold font-press-start text-indigo-600 underline underline-offset-2">
+											Open Source Libraries
+										</h2>
+										<Table
+											isStriped
+											classNames={{
+												wrapper: 'border-neutral-500 border-2'
+											}}
+										>
+											<TableHeader>
+												<TableColumn>Library</TableColumn>
+												<TableColumn>License</TableColumn>
+											</TableHeader>
+											<TableBody
+												items={[
+													{
+														name: 'NextUI',
+														license: 'MIT',
+														github: 'nextui-org/nextui'
+													},
+													{
+														name: 'React',
+														license: 'MIT',
+														github: 'facebook/react'
+													},
+													{
+														name: 'TypeScript',
+														license: 'Apache-2.0',
+														github: 'microsoft/TypeScript'
+													},
+													{
+														name: 'Tailwind CSS',
+														license: 'MIT',
+														github: 'tailwindlabs/tailwindcss'
+													},
+													{
+														name: 'Font Awesome',
+														license: 'MIT',
+														github: 'FortAwesome/react-fontawesome'
+													},
+													{
+														name: 'ESLint',
+														license: 'MIT',
+														github: 'eslint/eslint'
+													},
+													{
+														name: 'eslint-plugin-react',
+														license: 'MIT',
+														github: 'jsx-eslint/eslint-plugin-react',
+														isMono: true
+													},
+													{
+														name: 'Prettier',
+														license: 'MIT',
+														github: 'prettier/prettier'
+													},
+													{
+														name: 'Vite',
+														license: 'MIT',
+														github: 'vitejs/vite'
+													},
+													{
+														name: 'vite-plugin-react',
+														license: 'MIT',
+														github: 'vitejs/vite-plugin-react',
+														isMono: true
+													},
+													{
+														name: 'Puppeteer',
+														license: 'Apache-2.0'
+													}
+												]}
+											>
+												{item => (
+													<TableRow key={item.name}>
+														<TableCell>{item.name}</TableCell>
+														<TableCell>{item.license}</TableCell>
+													</TableRow>
+												)}
+											</TableBody>
+										</Table>
+									</div>
+								</ModalBody>
+								<ModalFooter>
+									<Button onPress={onOpenChange} color="warning">
+										Close
+									</Button>
+								</ModalFooter>
+							</ModalContent>
+						</Modal>
 
-						try {
-							if (lsSearchTerm) {
-								const data = JSON.parse(lsSearchTerm);
-								if (Array.isArray(data)) setSearchTerm(data);
-								else throw new Error();
-							} else throw new Error();
-						} catch {
-							error += ' Search term data is invalid. ';
-						}
-						setError(error.trim().replaceAll(/\s{2,}/g, ' '));
-					}}
-				>
-					Restore locally saved data
-				</Button> */}
+						<div className="flex flex-row justify-center align-middle gap-8 md:gap-12 tracking-normal text-xl">
+							<Link
+								href="https://github.com/akpi816218/wsearch"
+								target="_blank"
+								underline="always"
+								isExternal
+							>
+								<FontAwesomeIcon icon={faGithub} className="mr-2 mb-1" />
+								Source
+							</Link>
+							<Link
+								href="https://akpi.is-a.dev/"
+								target="_blank"
+								underline="always"
+								isExternal
+							>
+								<FontAwesomeIcon icon={faGlobe} className="mr-2 mb-1" />
+								Akhil Pillai
+							</Link>
+						</div>
 					</div>
 				</DynamicWrapper>
 			</main>
@@ -241,7 +359,6 @@ ZXCVBNMEWS\
 			setError((e as Error).message);
 		}
 	}
-
 	function submitForm(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		submit();

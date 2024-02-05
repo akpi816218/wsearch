@@ -4,15 +4,19 @@
 		"@types/react-dom": "^18.2.18",
 		"eslint": "^8.56.0",
 		"eslint-plugin-react": "^7.33.2",
-		"lodash": "^4.17.21",
 		"npm-check-updates": "^16.14.14",
 		"prettier": "^3.2.5",
+		"puppeteer": "^21.11.0",
+		"pwa-asset-generator": "^6.3.1",
 		"tailwindcss": "^3.4.1",
 		"tsx": "^4.7.0",
 		"typescript": "^5.3.3",
 		"vite": "^5.0.12"
 	},
 	"dependencies": {
+		"@fortawesome/free-brands-svg-icons": "^6.5.1",
+		"@fortawesome/free-solid-svg-icons": "^6.5.1",
+		"@fortawesome/react-fontawesome": "^0.2.0",
 		"@nextui-org/react": "^2.2.9",
 		"@vitejs/plugin-react": "^4.2.1",
 		"react": "^18.2.0",
@@ -21,7 +25,10 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "npm urn tw && vite build",
+		"build": "npm urn tw && npm urn vite build && npm urn gen-screenshots && npm urn gen-icons",
+		"gen-icons": "tsx scripts/generateIcons.ts",
+		"gen-screenshots": "tsx scripts/generateScreenshots.ts",
+		"preview": "vite preview",
 		"tw": "tailwind -mi src/_styles/input.css -o src/_styles/main.out.css",
 		"tw:watch": "npm urn tw -- -w"
 	}
