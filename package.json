@@ -25,7 +25,7 @@
 	},
 	"type": "module",
 	"scripts": {
-		"build": "npm urn tw && vite build && npm urn gen-screenshots && npm urn gen-icons",
+		"build": "npm urn tw && vite build && npm urn gen-icons",
 		"gen-icons": "tsx scripts/generateIcons.ts",
 		"gen-screenshots": "tsx scripts/generateScreenshots.ts",
 		"preview": "vite preview",
