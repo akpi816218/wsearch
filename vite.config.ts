@@ -15,7 +15,7 @@ export default defineConfig({
 				id: 'app.vercel.ws-s',
 				name: 'Wordsearch Solver',
 				short_name: 'Wordsearch Solver',
-				start_url: '/',
+				start_url: '/wsearch/',
 				display: 'standalone',
 				display_override: ['window-controls-overlay'],
 				background_color: '#000',
